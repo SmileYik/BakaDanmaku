@@ -80,6 +80,12 @@ public class BilibiliConfig implements IConfig {
         @SerializedName("enable")
         private boolean enable = false;
 
+        /**
+         * WebSocket 鉴权验证，即连接wss后所发送的第一条信息。${roomId} 为房间ID占位符
+         */
+        @SerializedName("auth")
+        private String auth = "{\"roomid\": ${roomId}}";
+
         public int getId() {
             return id;
         }
@@ -94,6 +100,14 @@ public class BilibiliConfig implements IConfig {
 
         public void setEnable(boolean enable) {
             this.enable = enable;
+        }
+
+        public String getAuth() {
+            return auth;
+        }
+
+        public void setAuth(String auth) {
+            this.auth = auth;
         }
     }
 
