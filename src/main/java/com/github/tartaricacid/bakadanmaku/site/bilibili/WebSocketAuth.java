@@ -30,7 +30,7 @@ public class WebSocketAuth {
         String buvid3 = "";
         boolean ownerAuth = true;
         try {
-            if (room.getCookie() == null || !room.getCookie().containsKey("buvid3")) {
+            if (room.getCookie() == null) {
                 // 游客方式
                 ownerAuth = false;
                 Buvid buvid = Buvid.newBuvid(roomInfo.getRoomId());
@@ -45,9 +45,10 @@ public class WebSocketAuth {
                 BakaDanmaku.LOGGER.info("[BakaDanmaku] Login Be Guest");
             } else {
                 // 登陆方式
-                buvid3 = room.getCookie().getOrDefault("buvid3", null);
+                buvid3 = room.getCookie().getOrDefault("buvid3", Buvid.getBuvid3(roomInfo.getRoomId()));
                 StringBuilder sb = new StringBuilder();
                 room.getCookie().forEach((k, v) -> {
+                    if ("buvid3".equals(k)) return;
                     try {
                         v = URLEncoder.encode(v, "UTF-8");
                     } catch (UnsupportedEncodingException ignored) {
@@ -55,7 +56,7 @@ public class WebSocketAuth {
                     }
                     sb.append(k).append("=").append(v).append("; ");
                 });
-                cookie = sb.toString();
+                cookie = String.format("buvid3=%s; %s", URLEncoder.encode(buvid3, "UTF-8"), sb);
                 BakaDanmaku.LOGGER.info("[BakaDanmaku] Login Be User");
             }
         } catch (UnsupportedEncodingException e) {
@@ -111,6 +112,11 @@ public class WebSocketAuth {
                 e.printStackTrace();
             }
             return null;
+        }
+
+        public static String getBuvid3(long roomId) {
+            Buvid buvid = newBuvid(roomId);
+            return buvid == null ? null : buvid.buvid3;
         }
 
         public String getBuvid3() {
