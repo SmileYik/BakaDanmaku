@@ -58,16 +58,13 @@ public class BilibiliSite implements ISite {
 
     @Override
     public void initMessage(WebSocketClient client) {
-        int id = RoomId.getRealRoomId(config.getRoom().getId());
-        if (id == -1) {
+        byte[] message = WebSocketAuth.newAuth(config.getRoom());
+        if (message == null) {
             MinecraftForge.EVENT_BUS.post(new SendDanmakuEvent("房间获取失败！请检查是否输入错误，或者网络有问题"));
+            return;
         } else {
             MinecraftForge.EVENT_BUS.post(new SendDanmakuEvent("房间获取成功！正在连接弹幕！"));
         }
-
-        // 目前看来，在鉴权消息中仅含有 "roomid" 字段已经无法通过鉴权。
-        // 暂时性的解决方法是，让用户自己主动从直播间页面中的ws消息列表中获取鉴权消息。
-        byte[] message = config.getRoom().getAuth().replace("${roomId}", String.valueOf(id)).getBytes(StandardCharsets.UTF_8);
 
         ByteBuf buf = Unpooled.buffer();
         buf.writeInt(HEADER_LENGTH + message.length);
