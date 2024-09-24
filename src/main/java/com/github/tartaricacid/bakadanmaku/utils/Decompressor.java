@@ -1,6 +1,7 @@
 package com.github.tartaricacid.bakadanmaku.utils;
 
-import org.brotli.dec.BrotliInputStream;
+
+import com.github.tartaricacid.bakadanmaku.brotli.dec.BrotliInputStream;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -55,6 +56,7 @@ public final class Decompressor {
 
     /**
      * 根据现有的解压缩方法，尝试解压缩给予的字节数组。
+     *
      * @param data 需要解压缩的字节数组。
      * @return 解压缩后的字节数组，若解压缩方法全部无效则返回原数组。
      */
@@ -73,7 +75,8 @@ public final class Decompressor {
 
     /**
      * 根据基于的解压缩方法去解压缩字节数组。
-     * @param data 要解压缩的字节数组。
+     *
+     * @param data   要解压缩的字节数组。
      * @param method 要使用的方法。
      * @return 返回解压缩后的字节数组，若解压缩失败则返回原数组。
      */

@@ -49,6 +49,6 @@ public class RoomInfo {
         if (extractRoomId == null) {
             return null;
         }
-        return new RoomInfo(Integer.parseInt(extractRoomId), Integer.parseInt(ownerId == null ? "0" : ownerId));
+        return new RoomInfo(Long.parseLong(extractRoomId), Long.parseLong(ownerId == null ? "0" : ownerId));
     }
 }
